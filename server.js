@@ -17,7 +17,14 @@ connectDB();
 
 /* ================= MIDDLEWARE ================= */
 
-app.use(cors());
+// 🔥 1. แก้ไข CORS สำหรับ Express (การยิง API ปกติ)
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://client-2-no3k.onrender.com"], 
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(helmet());
 
@@ -32,10 +39,12 @@ app.use("/api/boards", require("./routes/boardRoutes"));
 
 const server = http.createServer(app);
 
+// 🔥 2. แก้ไข CORS สำหรับ Socket.io (การส่งข้อมูล Real-time)
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: ["http://localhost:5173", "https://client-2-no3k.onrender.com"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true
   }
 });
 
@@ -49,23 +58,16 @@ io.on("connection", (socket) => {
   /* ================= USER ROOM ================= */
 
   socket.on("join", (userId) => {
-
     socket.join(userId);
-
     console.log("👤 User joined room:", userId);
-
   });
 
   /* ================= BOARD ROOM ================= */
 
   socket.on("joinBoard", (boardId) => {
-
     if (!boardId) return;
-
     socket.join(boardId);
-
     console.log("📋 Joined board:", boardId);
-
   });
 
   /* ================= DEBUG ================= */
@@ -77,9 +79,7 @@ io.on("connection", (socket) => {
   /* ================= DISCONNECT ================= */
 
   socket.on("disconnect", () => {
-
     console.log("❌ User disconnected:", socket.id);
-
   });
 
 });
