@@ -1,3 +1,19 @@
+/* ================= MIDDLEWARE ================= */
+
+// 🔥 กำหนดให้รับการเชื่อมต่อจากหน้าเว็บเราได้
+const corsOptions = {
+  // ⚠️ อย่าลืมเปลี่ยนลิงก์ด้านล่างนี้ ให้เป็นลิงก์หน้าบ้าน (Static Site) ของคุณนะครับ
+  origin: ["http://localhost:5173", "https://client-2-no3k.onrender.com"], 
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(helmet());
+
+/* ================= ROUTES ================= */
+
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
