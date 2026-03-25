@@ -49,7 +49,8 @@ router.post("/register", async (req, res) => {
     }
 
     // 📧 4. สร้างลิงก์และส่งอีเมล (เหมือนเดิม)
-    const verifyLink = `${process.env.CLIENT_URL}/verify?token=${vToken}`;
+    // เปลี่ยนจาก process.env เป็น URL จริงไปเลย
+    const verifyLink = `https://client-2-no3k.onrender.com/verify?token=${vToken}`;
     const msg = {
       to: email,
       from: { email: process.env.EMAIL_USER, name: "Pondd App" },
