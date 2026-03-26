@@ -48,16 +48,29 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // 📧 4. สร้างลิงก์และส่งอีเมล (เหมือนเดิม)
-    // เปลี่ยนจาก process.env เป็น URL จริงไปเลย
     const verifyLink = `https://client-2-no3k.onrender.com/verify?token=${vToken}`;
     const msg = {
       to: email,
       from: { email: process.env.EMAIL_USER, name: "Pondd App" },
       subject: "✅ กรุณายืนยันอีเมลของคุณ",
-      html: `<p>สวัสดี ${name}</p>
-             <p>กรุณากดลิงก์ด้านล่างเพื่อยืนยันอีเมลของคุณ (ลิงก์มีอายุการใช้งาน 24 ชั่วโมง):</p>
-             <a href="${verifyLink}">ยืนยันอีเมลคลิกที่นี่</a>`
+      html: `
+        <div style="font-family:sans-serif; padding:20px; background-color:#f9f9f9; border-radius:8px;">
+          <h2 style="color:#333;">สวัสดี ${name}</h2>
+          <p style="color:#555; font-size:16px;">กรุณากดปุ่มด้านล่างเพื่อยืนยันอีเมลของคุณ:</p>
+          
+          <a href="${verifyLink}" 
+             style="display:inline-block; padding:12px 20px; background-color:#10b981; color:#ffffff; text-decoration:none; border-radius:6px; font-weight:bold; margin-top:15px;">
+             ✅ ยืนยันอีเมลคลิกที่นี่
+          </a>
+
+          <div style="margin-top:25px; padding:15px; background-color:#e2e8f0; border-radius:6px;">
+            <p style="margin:0; color:#475569; font-size:14px; font-weight:bold;">⚠️ หากปุ่มด้านบนกดไม่ได้ (เนื่องจากอีเมลอยู่ในกล่องจดหมายขยะ)</p>
+            <p style="margin:5px 0 0 0; color:#475569; font-size:14px;">กรุณาคัดลอกลิงก์ด้านล่างนี้ไปวางในเบราว์เซอร์ของคุณ (Safari/Chrome):</p>
+            <p style="margin:10px 0 0 0; color:#2563eb; font-size:14px; word-break:break-all;">
+              ${verifyLink}
+            </p>
+          </div>
+        </div>`
     };
     
     await sgMail.send(msg);
